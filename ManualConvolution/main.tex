@@ -1,0 +1,111 @@
+\let\negmedspace\undefined
+\let\negthickspace\undefined
+\documentclass[journal]{IEEEtran}
+\usepackage[a5paper, margin=10mm, onecolumn]{geometry}
+\usepackage{tfrupee}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{txfonts}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} 
+\usepackage[latin1]{inputenc}                                
+\usepackage{color}                                            
+\usepackage{array}                                            
+\usepackage{longtable}                                       
+\usepackage{calc}                                             
+\usepackage{multirow}                                         
+\usepackage{hhline}                                           
+\usepackage{ifthen}                                           
+\usepackage{lscape}
+
+\begin{document}
+
+\bibliographystyle{IEEEtran}
+\vspace{3cm}
+
+\title{Manual Convolution Analysis}
+\author{EE24BTECH11004 - ANKIT JAINAR}
+\maketitle
+
+\section{Manual Convolution (with Step Signal and Rectangular Kernel)}
+
+To start the analysis, I chose a very simple signal: the unit step function defined as:
+\[
+f(t) = u(t) = 
+\begin{cases}
+1, & t \geq 0 \\
+0, & t < 0
+\end{cases}
+\]
+
+The kernel we are convolving with is a rectangular pulse:
+\[
+h(t) =
+\begin{cases}
+1, & -T \leq t \leq T \\
+0, & \text{otherwise}
+\end{cases}
+\]
+
+The convolution formula in continuous time is:
+\[
+y(t) = (f * h)(t) = \int_{-\infty}^{\infty} f(\tau) h(t - \tau) d\tau
+\]
+
+Since $u(\tau) = 0$ for $\tau < 0$, we can update the limits:
+\[
+y(t) = \int_{0}^{\infty} h(t - \tau) d\tau
+\]
+
+Now, the function $h(t - \tau)$ is non-zero only when:
+\[
+-T \leq t - \tau \leq T \Rightarrow t - T \leq \tau \leq t + T
+\]
+
+Combining with the lower bound of the step function ($\tau \geq 0$), we get:
+\[
+\tau \in [\max(0, t - T), t + T]
+\]
+
+The integrand is 1, so evaluating the integral:
+\[
+y(t) = \int_{\max(0, t - T)}^{t + T} 1 \, d\tau = t + T - \max(0, t - T)
+\]
+
+\subsection{Cases}
+
+Lets break it into different time ranges to understand the output better:
+
+\begin{itemize}
+    \item If $t < -T$: No overlap, so $y(t) = 0$
+    \item If $-T \leq t < 0$: Partial overlap, area increases: $y(t) = T + t$
+    \item If $0 \leq t < T$: Kernel continues to grow on step: $y(t) = T + t$
+    \item If $T \leq t \leq 2T$: Full overlap: $y(t) = 2T$
+    \item If $2T < t \leq 3T$: Overlap starts reducing: $y(t) = 3T - t$
+    \item If $t > 3T$: No overlap again: $y(t) = 0$
+\end{itemize}
+
+The result is a trapezoidal waveform:
+\[
+y(t) =
+\begin{cases}
+0, & t < -T \\
+T + t, & -T \leq t < T \\
+2T, & T \leq t \leq 2T \\
+3T - t, & 2T < t \leq 3T \\
+0, & t > 3T
+\end{cases}
+\]
+
+
+\end{document}
+
