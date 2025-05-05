@@ -17,7 +17,7 @@ def rectangular_convolution_analysis():
     
     # Get user input or use default values
     try:
-        print("\nEnter the input signal f(t) (examples: sin(t), t**2, exp(-t), Heaviside(t), log(abs(t)+1)):")
+        print("\nEnter the input signal f(t) (examples: sin(t), t**2, exp(-t), Heaviside(t)(For step-signal),Heaviside(t-1)(For delayed step-signal), log(abs(t)+1))\:")
         f_input = input("f(t) = ")
         if not f_input.strip():
             f_input = "Heaviside(t)"  # Default
